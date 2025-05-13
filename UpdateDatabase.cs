@@ -1,6 +1,6 @@
 namespace Sefer.Backend.GeoIP.Api;
 
-public class Updater
+public static class Updater
 {
     public static async Task Update(ServiceOptions options)
     {

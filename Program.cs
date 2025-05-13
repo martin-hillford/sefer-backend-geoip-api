@@ -19,7 +19,7 @@ app.MapGet("/{ipAddress}", async (IMemoryCache cache, IServiceOptionsProvider pr
     if (result == null) return Results.NotFound();
 
     // Check if the results needs to be stored
-    if (store) await Storage.SaveResultAsync(ipAddress, result);
+    if (store) await Storage.Create(options).SaveResultAsync(ipAddress, result);
     cache.Set(ipAddress, result, DateTimeOffset.UtcNow.AddHours(12));
     return Results.Json(result);
 });

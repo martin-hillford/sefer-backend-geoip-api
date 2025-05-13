@@ -6,3 +6,4 @@ global using Sefer.Backend.SharedConfig.Lib;
 global using System.Formats.Tar;
 global using System.IO.Compression;
 global using MaxMind.GeoIP2;
+global using System.Diagnostics.CodeAnalysis;

@@ -16,10 +16,12 @@ public class Resolver(ServiceOptions options)
         // And try to resolve the ip
         try
         {
+            // Get the ip information and do an additional check to ensure a response is give
             var result = _reader.City(ipAddress);
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if (result == null) return null;
 
-            return new()
+            return new Result
             {
                 Id = Guid.NewGuid(),
                 Continent = result.Continent.Name,

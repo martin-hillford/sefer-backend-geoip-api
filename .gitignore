@@ -2,3 +2,5 @@
 **/obj/
 **/bin/
 /build
+/appSettings.json
+/Sefer.Backend.GeoIP.Api.sln.DotSettings.user

@@ -1,14 +1,16 @@
 namespace Sefer.Backend.GeoIP.Api;
 
+[SuppressMessage("ReSharper", "PropertyCanBeMadeInitOnly.Global")]
 public class ServiceOptions
 {
-    public string? ApiKey { get; set; } = default;
+    public string? ApiKey { get; set; }
 
-    public string? GeoDatabasePath { get; set; } = default;
+    public string? GeoDatabasePath { get; set; }
 
-    public string? DatabaseConnectionString { get; set; } = default;
+    [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
+    public string? DatabaseConnectionString { get; set; }
 
-    public string? MaxMindLicenseKey { get; set; } = default;
+    public string? MaxMindLicenseKey { get; set; }
 }
 
 public class ServiceOptionsProvider(IConfiguration configuration) : IServiceOptionsProvider
@@ -17,12 +19,20 @@ public class ServiceOptionsProvider(IConfiguration configuration) : IServiceOpti
 
     public ServiceOptions GetServiceOptions()
     {
-        _serviceOptions ??= new()
+        _serviceOptions ??= new ServiceOptions
         {
-            ApiKey = configuration.GetSection("GeoIP").GetValue<string>("ApiKey"),
-            DatabaseConnectionString = configuration.GetSection("Database").GetValue<string>("ConnectionString"),
-            GeoDatabasePath = configuration.GetSection("GeoIPService").GetValue<string>("GeoDatabasePath"),
-            MaxMindLicenseKey = configuration.GetSection("GeoIPService").GetValue<string>("MaxMindLicenseKey")
+            ApiKey = 
+                EnvVar.GetEnvironmentVariable("GEOIP_API_KEY")  ??
+                configuration.GetSection("GeoIP").GetValue<string>("ApiKey"),
+            DatabaseConnectionString = 
+                EnvVar.GetEnvironmentVariable("DATABASE_CONNECTION") ??
+                configuration.GetSection("Database").GetValue<string>("ConnectionString"),
+            GeoDatabasePath = 
+                EnvVar.GetEnvironmentVariable("GEO_DB_PATH") ??
+                configuration.GetSection("GeoIPService").GetValue<string>("GeoDatabasePath"),
+            MaxMindLicenseKey = 
+                EnvVar.GetEnvironmentVariable("MAX_MIND_LICENSE") ??
+                configuration.GetSection("GeoIPService").GetValue<string>("MaxMindLicenseKey")
         };
         return _serviceOptions;
     }

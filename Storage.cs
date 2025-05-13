@@ -1,18 +1,18 @@
 namespace Sefer.Backend.GeoIP.Api;
 
-public static class Storage
+public class Storage(ServiceOptions options)
 {
     private const string Query = "INSERT INTO ip_address_lookups(id,ip_address,date,country_name,country_code,city,region,region_code,continent,latitude,longitude) VALUES(@id, @ipAddress, @date, @countryName, @countryCode, @city, @region, @regionCode, @continent, @latitude, @longitude )";
 
-    private static readonly string? ConnectionString = Environment.GetEnvironmentVariable("STORAGE_DATABASE");
-
-    public static async Task<bool> SaveResultAsync(string ipAddress, Result data)
+    public static Storage Create(ServiceOptions options) => new(options);
+    
+    public async Task<bool> SaveResultAsync(string ipAddress, Result data)
     {
         try
         {
-            if (string.IsNullOrEmpty(ConnectionString)) return false;
+            if (string.IsNullOrEmpty(options.DatabaseConnectionString)) return false;
 
-            await using var connection = new NpgsqlConnection(ConnectionString);
+            await using var connection = new NpgsqlConnection(options.DatabaseConnectionString);
             await using var command = new NpgsqlCommand(Query, connection);
 
             var parameters = new NpgsqlParameter[]

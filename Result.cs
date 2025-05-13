@@ -1,3 +1,4 @@
+// ReSharper disable PropertyCanBeMadeInitOnly.Global
 namespace Sefer.Backend.GeoIP.Api;
 
 public class Result
