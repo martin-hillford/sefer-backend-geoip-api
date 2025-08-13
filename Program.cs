@@ -13,12 +13,12 @@ app.MapGet("/{ipAddress}", async (IMemoryCache cache, IServiceOptionsProvider pr
     var cached = cache.Get<Result>(ipAddress);
     if (cached != null) return Results.Json(cached);
 
-    // lookup the ip address
+    // look up the ip address
     var resolver = new Resolver(options);
     var result = await resolver.Lookup(ipAddress);
     if (result == null) return Results.NotFound();
 
-    // Check if the results needs to be stored
+    // Check if the results need to be stored
     if (store) await Storage.Create(options).SaveResultAsync(ipAddress, result);
     cache.Set(ipAddress, result, DateTimeOffset.UtcNow.AddHours(12));
     return Results.Json(result);
